@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:todo_aoo/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_aoo/api/firebase_api.dart';
+import 'package:todo_aoo/model/todo_list.dart';
+import 'package:todo_aoo/provider/todo_provider.dart';
+import 'package:todo_aoo/screens/todos_list_screen.dart';
+
+import 'addtodo_widget.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({Key? key}) : super(key: key);
@@ -12,7 +18,7 @@ class _BottomBarState extends State<BottomBar> {
   int pageIndex = 0;
 
   List<Widget> pageList = <Widget>[
-    HomeScreen(),
+    TodosListScreen(),
     Container(
       child: Text('2'),
     ),
@@ -20,7 +26,36 @@ class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pageList[pageIndex],
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Todo'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: GestureDetector(child: Icon(Icons.add)),
+          ),
+        ],
+      ),
+      body: StreamBuilder<List<TodoList>>(
+        stream: FirebaseApi.fetchTodos(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            default:
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Something Went Wrong, Try Again Later'),
+                );
+              } else {
+                final todos = snapshot.data;
+                final provider = Provider.of<TodoProvider>(context);
+                provider.setTodos(todos!);
+                return pageList[pageIndex];
+              }
+          }
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: pageIndex,
         onTap: (value) {
@@ -45,6 +80,14 @@ class _BottomBarState extends State<BottomBar> {
             label: 'Completed',
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        onPressed: () => showDialog(
+            context: context,
+            builder: (BuildContext context) => AddTodoWidget()),
+        child: Icon(Icons.add),
       ),
     );
   }

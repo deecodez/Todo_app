@@ -17,12 +17,19 @@ class EditTodoScreen extends StatefulWidget {
 class _EditTodoScreenState extends State<EditTodoScreen> {
   String? title;
   String? description;
+  String? reminderDate;
+  String? reminderTime;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     title = widget.todo.title;
     description = widget.todo.description;
+    reminderDate = widget.todo.reminderDate;
+    reminderTime = widget.todo.reminderTime;
+    print(widget.todo.reminderDate);
+    print(reminderDate);
+    print(title);
     super.initState();
   }
 
@@ -40,8 +47,13 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
                     Provider.of<TodoProvider>(context, listen: false);
                 provider.deleteTodo(widget.todo);
 
-                Utils.showSnackBar(context, 'Todo Deleted Sucessfully');
-                Navigator.pop(context);
+                Utils.showSnackBar(context, 'Todo Deleted Sucessfully', () {
+                  setState(() {
+                    final providerReAdd =
+                        Provider.of<TodoProvider>(context, listen: false);
+                    providerReAdd.addTodo(widget.todo);
+                  });
+                });
               },
               icon: Icon(Icons.delete),
             ),
@@ -57,9 +69,15 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
           child: TodoFormWidget(
             title: title!,
             description: description!,
+            reminderDate: reminderDate!,
+            reminderTime: reminderTime!,
             onChangedTitle: (title) => setState(() => this.title = title),
             onChangedDecription: (description) =>
                 setState(() => this.description = description),
+            onChangedReminderDate: (reminderDate) =>
+                setState(() => this.reminderDate = reminderDate),
+            onChangedReminderTime: (reminderTime) =>
+                setState(() => this.reminderTime = reminderTime),
             onSavedTodos: editTodo,
           ),
         ),
@@ -73,7 +91,8 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
       return;
     } else {
       final provider = Provider.of<TodoProvider>(context, listen: false);
-      provider.editTodo(widget.todo, title!, description!);
+      provider.editTodo(
+          widget.todo, title!, description!, reminderDate!, reminderTime!);
       Navigator.pop(context);
     }
   }

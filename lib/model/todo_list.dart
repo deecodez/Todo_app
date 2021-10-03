@@ -9,6 +9,8 @@ class TodoList {
   String title;
   String id;
   String description;
+  String reminderDate;
+  String reminderTime;
   // bool isDone
 
   TodoList({
@@ -16,12 +18,16 @@ class TodoList {
     required this.id,
     this.title = '',
     this.description = '',
+    this.reminderDate = '',
+    this.reminderTime = '',
   });
 
   static TodoList fromJson(Map<String, dynamic> json) => TodoList(
         timeCreated: Utils.toDateTime(json['timeCreated']),
         title: json['title'],
         description: json['description'],
+        reminderDate: json['reminderDate'],
+        reminderTime: json['reminderTime'],
         id: json['id'],
       );
 
@@ -29,6 +35,8 @@ class TodoList {
         'title': title,
         'description': description,
         'id': id,
+        'reminderDate': reminderDate,
+        'reminderTime': reminderTime,
         'timeCreated': Utils.fromDateTimeToJson(timeCreated!),
       };
 }

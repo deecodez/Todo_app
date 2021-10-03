@@ -5,19 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Utils {
-  static void showSnackBar(BuildContext context, String text) =>
+  static void showSnackBar(
+          BuildContext context, String text, VoidCallback onPressed) =>
       ScaffoldMessenger.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
             content: Text(text),
             action: SnackBarAction(
-                label: 'Undo',
-                // "TODO: | To add undo feature";
-                onPressed: () {
-                  // Navigator.pop(context);
-                  // Navigator.of(context).pop(false);
-                }),
+              label: 'Undo',
+              // "TODO: | To add undo feature";
+              onPressed: onPressed,
+            ),
           ),
         );
 

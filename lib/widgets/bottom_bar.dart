@@ -27,12 +27,26 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text('Todo'),
+        backgroundColor: Colors.black,
+        // centerTitle: true,
+        title: Text(
+          'Todo App',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 25.0,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: GestureDetector(child: Icon(Icons.add)),
+            child: GestureDetector(
+              child: Icon(Icons.add),
+              onTap: () => showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AddTodoWidget()),
+              // child: Icon(Icons.add),
+            ),
           ),
         ],
       ),
@@ -82,6 +96,7 @@ class _BottomBarState extends State<BottomBar> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         onPressed: () => showDialog(

@@ -60,9 +60,12 @@ class TodoProvider extends ChangeNotifier {
   // }
   void deleteTodo(TodoList todo) => FirebaseApi.deleteTodo(todo);
 
-  void editTodo(TodoList todo, String title, String description) {
+  void editTodo(TodoList todo, String title, String description,
+      String reminderDate, String reminderTime) {
     todo.title = title;
     todo.description = description;
+    todo.reminderDate = reminderDate;
+    todo.reminderTime = reminderTime;
     FirebaseApi.updateTodo(todo);
     // notifyListeners();
   }

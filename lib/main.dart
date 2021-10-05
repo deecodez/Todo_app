@@ -6,6 +6,8 @@ import 'provider/todo_provider.dart';
 import 'widgets/bottom_bar.dart';
 
 Future main() async {
+  // "TODO: | To fix undo feature";
+  //NOtification
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
